@@ -61,6 +61,69 @@ namespace MasteringEF.Controllers
             return View(blog);
         }
 
+        public IActionResult Delete(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var blogs = _context.Blogs.FirstOrDefault(m =>m.id==id);
+
+            if (blogs == null)
+            {
+                return NotFound();
+            }
+            return View(blogs);
+
+        }
+
+        [HttpPost, ActionName("Delete")]
+       
+        public IActionResult DeleteConfirmed(int id)
+        {
+            var blog =  _context.Blogs.Find(id);
+            _context.Blogs.Remove(blog);
+            _context.SaveChanges();
+            return RedirectToAction(nameof(Index));
+        }
+
+
+        public IActionResult Details(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var blogs = _context.Blogs.FirstOrDefault(m => m.id == id);
+
+            if (blogs == null)
+            {
+                return NotFound();
+            }
+            return View(blogs);
+
+        }
+
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult Create([Bind("id,Url")] Blog blog)
+        {
+            if (ModelState.IsValid)
+            {
+
+                _context.Add(blog);
+                _context.SaveChanges();
+
+                return RedirectToAction(nameof(Index));
+            }
+
+            return View(blog);
+        }
+
 
     }
 }
